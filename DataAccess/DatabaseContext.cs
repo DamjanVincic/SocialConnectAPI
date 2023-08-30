@@ -22,6 +22,10 @@ namespace SocialConnectAPI.DataAccess {
 
             modelBuilder.Entity<Post>().OwnsOne(p => p.Tags);
 
+            modelBuilder.Entity<Post>()
+                        .HasMany<Comment>()
+                        .WithOne();
+
             // modelBuilder.Entity<User>()
             //         .HasMany<Post>()
             //         .WithOne();

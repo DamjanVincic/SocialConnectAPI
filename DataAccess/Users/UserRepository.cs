@@ -10,19 +10,19 @@ namespace SocialConnectAPI.DataAccess.Users {
 
 
         public List<User>? GetUsers() {
-            return databaseContext.Users.ToList();
+            return databaseContext.Users.ToList().FindAll(u => u.Status != UserStatus.Inactive);
         }
 
         public User? GetUserById(int id) {
-            return databaseContext.Users.FirstOrDefault(u => u.Id == id);
+            return databaseContext.Users.FirstOrDefault(u => u.Id == id && u.Status != UserStatus.Inactive);
         }
 
         public User? GetUserByEmail(string email) {
-            return databaseContext.Users.FirstOrDefault(u => u.Email == email);
+            return databaseContext.Users.FirstOrDefault(u => u.Email == email && u.Status != UserStatus.Inactive);
         }
 
         public User? GetUserByNameSurname(string name, string surname) {
-            return databaseContext.Users.FirstOrDefault(u => u.Name == name && u.Surname == surname);
+            return databaseContext.Users.FirstOrDefault(u => u.Name == name && u.Surname == surname && u.Status != UserStatus.Inactive);
         }
 
         public User CreateUser(User user) {

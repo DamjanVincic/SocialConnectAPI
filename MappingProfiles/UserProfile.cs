@@ -9,6 +9,8 @@ namespace SocialConnectAPI.MappingProfiles {
             CreateMap<User, GetUserResponse>();
             CreateMap<CreateUserRequest, User>();
             CreateMap<User, CreateUserResponse>();
+            CreateMap<UpdateUserRequest, User>();
+            CreateMap<User, UpdateUserResponse>();
         }
     }
 }
