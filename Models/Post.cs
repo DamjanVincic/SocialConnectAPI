@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace SocialConnectAPI.Models {
     /// <summary>
     /// Post model.
@@ -9,6 +11,7 @@ namespace SocialConnectAPI.Models {
         public string Text { get; set;}
         public List<string> Tags { get; set; }
         public PostStatus Status { get; set; }
+        [NotMapped] // izbrisati
         public List<User> Likes { get; set; }
         public List<Comment> Comments { get; set; }
     }
