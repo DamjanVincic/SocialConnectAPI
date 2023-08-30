@@ -1,7 +1,7 @@
 namespace SocialConnectAPI.Models {
-    public enum UserStatus {
+    public enum PostStatus {
         Active,
-        Inactive,
+        Archived,
         Deleted
     }
 }
