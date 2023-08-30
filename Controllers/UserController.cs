@@ -31,9 +31,40 @@ namespace SocialConnectAPI.Controllers {
                 return NotFound();
             }
             return Ok(mapper.Map<List<GetUserResponse>>(users));
+            // return Ok(users);
         }
 
-        // GetUserById, GetUserByEmail
+        /// <summary>
+        /// Get a user by ID.
+        /// </summary>
+        /// <param name="id">User ID.</param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<GetUserResponse> GetUserById(int id) {
+            User user = userRepository.GetUserById(id);
+            if (user == null)
+                return NotFound();
+            return Ok(mapper.Map<GetUserResponse>(user));
+        }
+
+        /// <summary>
+        /// Get a user by email.
+        /// </summary>
+        /// <param name="email">User's email.</param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("get")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<GetUserResponse> GetUserByEmail(string email) {
+            User user = userRepository.GetUserByEmail(email);
+            if (user == null)
+                return NotFound();
+            return Ok(mapper.Map<GetUserResponse>(user));
+        }
 
         /// <summary>
         /// Create a user.
@@ -43,7 +74,7 @@ namespace SocialConnectAPI.Controllers {
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<CreateUserResponse> CreateUser([FromBody] CreateUserRequest user) {
+        public ActionResult<CreateUserResponse> CreateUser(CreateUserRequest user) {
             try {
                 var createdUser = userRepository.CreateUser(mapper.Map<User>(user));
                 // userRepository.SaveChanges();
@@ -51,7 +82,27 @@ namespace SocialConnectAPI.Controllers {
             } catch {
                 return StatusCode(500);
             }
+        }
 
+        /// <summary>
+        /// Update a user.
+        /// </summary>
+        /// <param name="user">User to be updated.</param>
+        /// <returns></returns>
+        [HttpPut]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<UpdateUserResponse> UpdateUser(UpdateUserRequest user) {
+            try {
+                User userDB = userRepository.GetUserById(user.Id);
+                if (userDB == null)
+                    return NotFound();
+                mapper.Map(user, userDB);
+                userRepository.SaveChanges();
+                return Ok(mapper.Map<UpdateUserResponse>(userDB));
+            } catch {
+                return StatusCode(500);
+            }
         }
     }
 }
