@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using SocialConnectAPI.DataAccess;
+using SocialConnectAPI.DataAccess.Users;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,12 +11,16 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+// ubaciti ostale repozitorijume
+
 
 builder.Services.AddDbContext<DatabaseContext>(options => {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
             .LogTo(Console.WriteLine, LogLevel.Information);
 });
+
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 var app = builder.Build();
 
@@ -26,6 +31,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseRouting();
+
 app.UseHttpsRedirection();
+
+app.MapControllers();
 
 app.Run();
