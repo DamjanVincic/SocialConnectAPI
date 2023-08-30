@@ -1,9 +1,21 @@
+using Microsoft.EntityFrameworkCore;
+using SocialConnectAPI.DataAccess;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddControllers();
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+builder.Services.AddDbContext<DatabaseContext>(options => {
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
+            .LogTo(Console.WriteLine, LogLevel.Information);
+});
 
 var app = builder.Build();
 
