@@ -1,4 +1,7 @@
 namespace SocialConnectAPI.Models {
+    /// <summary>
+    /// Post model.
+    /// </summary>
     public class Post {
         public int Id { get; set;}
         // public int UserId { get; set;}

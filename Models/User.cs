@@ -1,4 +1,7 @@
 namespace SocialConnectAPI.Models {
+    /// <summary>
+    /// User model.
+    /// </summary>
     public class User {
         public int Id { get; set; }
         public string Name { get; set; }
