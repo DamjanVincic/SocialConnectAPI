@@ -27,6 +27,7 @@ namespace SocialConnectAPI.DataAccess.Users {
 
         public User CreateUser(User user) {
             var createdUser = databaseContext.Users.Add(user);
+            SaveChanges();
             return createdUser.Entity;
         }
 
@@ -39,6 +40,7 @@ namespace SocialConnectAPI.DataAccess.Users {
             if (user == null)
                 throw new Exception("User not found");
             var deletedUser = databaseContext.Users.Remove(user);
+            SaveChanges();
             return deletedUser.Entity;
         }
 
@@ -47,6 +49,7 @@ namespace SocialConnectAPI.DataAccess.Users {
             if (user == null)
                 throw new Exception("User not found");
             var deletedUser = databaseContext.Users.Remove(user);
+            SaveChanges();
             return deletedUser.Entity;
         }
 
@@ -55,6 +58,7 @@ namespace SocialConnectAPI.DataAccess.Users {
             if (user == null)
                 throw new Exception("User not found");
             user.Status = UserStatus.Inactive;
+            SaveChanges();
         }
 
         public void FollowUser(int userId, int userToFollowId) {
@@ -64,6 +68,7 @@ namespace SocialConnectAPI.DataAccess.Users {
                 throw new Exception("User not found");
             user.Following.Add(userToFollow);
             userToFollow.Followers.Add(user);
+            SaveChanges();
         }
 
         public bool SaveChanges() {
