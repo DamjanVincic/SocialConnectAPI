@@ -27,8 +27,8 @@ namespace SocialConnectAPI.DataAccess.Users {
         }
 
         public User CreateUser(User user) {
-            user.Followers = new List<User>();
-            user.Following = new List<User>();
+            // user.Followers = new List<User>();
+            // user.Following = new List<User>();
             // user.LikedPosts = new();
             var createdUser = databaseContext.Users.Add(user);
             SaveChanges();

@@ -38,5 +38,9 @@ namespace SocialConnectAPI.DataAccess {
             //         .HasMany<User>()
             //         .WithOne();
         }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
+            optionsBuilder.UseLazyLoadingProxies(); // Enable lazy loading
+        }
     }
 }
