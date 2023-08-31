@@ -24,14 +24,14 @@ namespace SocialConnectAPI.Controllers {
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<List<User>> GetUsers() {
+        public ActionResult<List<GetUserResponse>> GetUsers() {
             List<User>? users = userRepository.GetUsers();
             // pretvoriti listu usera, postova, komenatra u DTOove pre slanja
             if (users == null) {
                 return NotFound();
             }
-            // return Ok(mapper.Map<List<GetUserResponse>>(users));
-            return Ok(users);
+            return Ok(mapper.Map<List<GetUserResponse>>(users));
+            // return Ok(users);
         }
 
         /// <summary>

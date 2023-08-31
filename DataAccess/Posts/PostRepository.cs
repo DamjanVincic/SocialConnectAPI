@@ -1,14 +1,19 @@
 using SocialConnectAPI.DataAccess.Users;
 using SocialConnectAPI.Models;
+using SocialConnectAPI.DTOs.Users;
+using SocialConnectAPI.DTOs.Comments;
+using AutoMapper;
 
 namespace SocialConnectAPI.DataAccess.Posts {
     public class PostRepository : IPostRepository {
         private readonly DatabaseContext databaseContext;
         private readonly IUserRepository userRepository;
+        private readonly IMapper mapper;
 
-        public PostRepository (DatabaseContext databaseContext, IUserRepository userRepository) {
+        public PostRepository (DatabaseContext databaseContext, IUserRepository userRepository, IMapper mapper) {
             this.databaseContext = databaseContext;
             this.userRepository = userRepository;
+            this.mapper = mapper;
         }
 
         public List<Post> GetPosts() {
@@ -24,7 +29,8 @@ namespace SocialConnectAPI.DataAccess.Posts {
         }
 
         public List<Post> GetPostsByTag(string tag) {
-            return databaseContext.Posts.ToList().FindAll(p => p.Tags.Contains(tag));
+            // return databaseContext.Posts.ToList().FindAll(p => p.Tags.Contains(tag));
+            throw new NotImplementedException();
         }
 
         public Post CreatePost(Post post) {
@@ -32,7 +38,7 @@ namespace SocialConnectAPI.DataAccess.Posts {
             if (post.User == null)
                 throw new Exception("User not found.");
             // post.Likes = new List<User>();
-            post.Comments = new List<Comment>();
+            post.Comments = new List<DbCommentDTO>();
             var createdPost = databaseContext.Posts.Add(post);
             SaveChanges();
             return createdPost.Entity;
@@ -74,7 +80,7 @@ namespace SocialConnectAPI.DataAccess.Posts {
             if (user == null || post == null)
                 throw new Exception("Not found.");
 
-            post.Likes.Add(user);
+            post.Likes.Add(mapper.Map<DbUserDTO>(user));
             // user.LikedPosts.Add(post);
             SaveChanges();
         }

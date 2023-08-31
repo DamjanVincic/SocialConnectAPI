@@ -12,6 +12,8 @@ namespace SocialConnectAPI.MappingProfiles {
 
             CreateMap<UpdateCommentRequest, Comment>();
             CreateMap<Comment, UpdateCommentResponse>();
+
+            CreateMap<Comment, DbCommentDTO>();
         }
     }
 }

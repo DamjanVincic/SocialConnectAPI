@@ -1,12 +1,16 @@
 using Microsoft.EntityFrameworkCore;
 using SocialConnectAPI.Models;
+using AutoMapper;
+using SocialConnectAPI.DTOs.Users;
 
 namespace SocialConnectAPI.DataAccess.Users {
     public class UserRepository : IUserRepository {
         private DatabaseContext databaseContext;
+        private IMapper mapper;
 
-        public UserRepository(DatabaseContext databaseContext) {
+        public UserRepository(DatabaseContext databaseContext, IMapper mapper) {
             this.databaseContext = databaseContext;
+            this.mapper = mapper;
         }
 
 
@@ -71,8 +75,8 @@ namespace SocialConnectAPI.DataAccess.Users {
             User userToFollow = GetUserById(userToFollowId);
             if (user == null || userToFollow == null)
                 throw new Exception("User not found");
-            user.Following.Add(userToFollow);
-            userToFollow.Followers.Add(user);
+            user.Following.Add(mapper.Map<DbUserDTO>(userToFollow));
+            userToFollow.Followers.Add(mapper.Map<DbUserDTO>(user));
             SaveChanges();
         }
 

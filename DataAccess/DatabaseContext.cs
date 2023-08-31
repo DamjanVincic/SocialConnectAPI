@@ -16,19 +16,19 @@ namespace SocialConnectAPI.DataAccess {
 
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<User>()
-                      .HasIndex(u => u.Email)
-                      .IsUnique();
+            // modelBuilder.Entity<User>()
+            //           .HasIndex(u => u.Email)
+            //           .IsUnique();
 
-            modelBuilder.Entity<Post>().OwnsOne(p => p.Tags);
+            // modelBuilder.Entity<Post>().OwnsOne(p => p.Tags);
 
-            modelBuilder.Entity<Post>()
-                        .HasMany<User>();
+            // modelBuilder.Entity<Post>()
+            //             .HasMany<User>();
 
-            modelBuilder.Entity<Post>()
-                        .HasMany<Comment>()
-                        .WithOne()
-                        .HasForeignKey(p => p.PostId);
+            // modelBuilder.Entity<Post>()
+            //             .HasMany<Comment>()
+            //             .WithOne()
+            //             .HasForeignKey(p => p.PostId);
 
             // modelBuilder.Entity<User>()
             //         .HasMany<Post>()
@@ -40,7 +40,7 @@ namespace SocialConnectAPI.DataAccess {
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
-            optionsBuilder.UseLazyLoadingProxies(); // Enable lazy loading
+            optionsBuilder.UseLazyLoadingProxies();
         }
     }
 }

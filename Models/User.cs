@@ -1,3 +1,5 @@
+using SocialConnectAPI.DTOs.Users;
+
 namespace SocialConnectAPI.Models {
     /// <summary>
     /// User model.
@@ -9,8 +11,8 @@ namespace SocialConnectAPI.Models {
         public string Email { get; set; }
         public string Password { get; set; }
         public UserStatus Status { get; set; }
-        public virtual List<User> Following { get; set; } = new List<User>();
-        public virtual List<User> Followers { get; set; } = new List<User>();
+        public virtual List<DbUserDTO> Following { get; set; } = new List<DbUserDTO>();
+        public virtual List<DbUserDTO> Followers { get; set; } = new List<DbUserDTO>();
         // public List<Post> LikedPosts { get; set; }
     }
 }
