@@ -57,12 +57,13 @@ namespace SocialConnectAPI.DataAccess.Users {
             return deletedUser.Entity;
         }
 
-        public void MarkInactive(int userId) {
+        public User MarkInactive(int userId) {
             User user = GetUserById(userId);
             if (user == null)
                 throw new Exception("User not found");
             user.Status = UserStatus.Inactive;
             SaveChanges();
+            return user;
         }
 
         public void FollowUser(int userId, int userToFollowId) {

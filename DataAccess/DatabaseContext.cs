@@ -20,7 +20,7 @@ namespace SocialConnectAPI.DataAccess {
                       .HasIndex(u => u.Email)
                       .IsUnique();
 
-            // modelBuilder.Entity<Post>().OwnsOne(p => p.Tags);
+            modelBuilder.Entity<Post>().OwnsOne(p => p.Tags);
 
             modelBuilder.Entity<Post>()
                         .HasMany<User>();

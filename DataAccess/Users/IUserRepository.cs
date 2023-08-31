@@ -10,7 +10,7 @@ namespace SocialConnectAPI.DataAccess.Users {
         public User UpdateUser(User user);
         public User DeleteUserById(int id);
         public User DeleteUserByEmail(string email);
-        public void MarkInactive(int userId);
+        public User MarkInactive(int userId);
         public void FollowUser(int userId, int userToFollowId);
         public bool SaveChanges();
     }

@@ -4,9 +4,11 @@ using SocialConnectAPI.Models;
 namespace SocialConnectAPI.DataAccess.Posts {
     public class PostRepository : IPostRepository {
         private readonly DatabaseContext databaseContext;
+        private readonly IUserRepository userRepository;
 
-        public PostRepository (DatabaseContext databaseContext) {
+        public PostRepository (DatabaseContext databaseContext, IUserRepository userRepository) {
             this.databaseContext = databaseContext;
+            this.userRepository = userRepository;
         }
 
         public List<Post> GetPosts() {
@@ -26,7 +28,9 @@ namespace SocialConnectAPI.DataAccess.Posts {
         }
 
         public Post CreatePost(Post post) {
-            post.Tags = new List<string>();
+            post.User = userRepository.GetUserById(post.UserId);
+            if (post.User == null)
+                throw new Exception("User not found.");
             // post.Likes = new List<User>();
             post.Comments = new List<Comment>();
             var createdPost = databaseContext.Posts.Add(post);
@@ -57,12 +61,15 @@ namespace SocialConnectAPI.DataAccess.Posts {
         }
 
         public List<Post> GetNumberOfPosts(int number) {
+            // baca gresku jer baza vraca null umesto liste
+            
             return GetPosts().OrderByDescending(p => p.Likes.Count()).Take(10).ToList();
         }
 
         public void LikePost(int postId, int userId) {
             Post post = GetPostById(postId);
-            User user = new UserRepository(databaseContext).GetUserById(userId);
+            // User user = new UserRepository(databaseContext).GetUserById(userId);
+            User user = userRepository.GetUserById(userId);
 
             if (user == null || post == null)
                 throw new Exception("Not found.");

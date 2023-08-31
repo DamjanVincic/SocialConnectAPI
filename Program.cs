@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using SocialConnectAPI.DataAccess;
+using SocialConnectAPI.DataAccess.Posts;
 using SocialConnectAPI.DataAccess.Users;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +13,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IPostRepository, PostRepository>();
 // ubaciti ostale repozitorijume
 
 

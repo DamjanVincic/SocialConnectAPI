@@ -12,5 +12,6 @@ namespace SocialConnectAPI.DataAccess.Posts {
         public Post ArchivePost(int id);
         public List<Post> GetNumberOfPosts(int number);
         public void LikePost(int postId, int userId);
+        public bool SaveChanges();
     }
 }
