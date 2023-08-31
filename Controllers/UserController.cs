@@ -25,7 +25,7 @@ namespace SocialConnectAPI.Controllers {
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<List<User>> GetUsers() {
-            List<User> users = userRepository.GetUsers();
+            List<User>? users = userRepository.GetUsers();
             // pretvoriti listu usera, postova, komenatra u DTOove pre slanja
             if (users == null) {
                 return NotFound();
@@ -44,7 +44,7 @@ namespace SocialConnectAPI.Controllers {
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<GetUserResponse> GetUserById(int id) {
-            User user = userRepository.GetUserById(id);
+            User? user = userRepository.GetUserById(id);
             if (user == null)
                 return NotFound();
             return Ok(mapper.Map<GetUserResponse>(user));
@@ -60,7 +60,7 @@ namespace SocialConnectAPI.Controllers {
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<GetUserResponse> GetUserByEmail(string email) {
-            User user = userRepository.GetUserByEmail(email);
+            User? user = userRepository.GetUserByEmail(email);
             if (user == null)
                 return NotFound();
             return Ok(mapper.Map<GetUserResponse>(user));
@@ -94,7 +94,7 @@ namespace SocialConnectAPI.Controllers {
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<UpdateUserResponse> UpdateUser(UpdateUserRequest user) {
             try {
-                User userDB = userRepository.GetUserById(user.Id);
+                User? userDB = userRepository.GetUserById(user.Id);
                 if (userDB == null)
                     return NotFound();
                 mapper.Map(user, userDB);
@@ -138,6 +138,23 @@ namespace SocialConnectAPI.Controllers {
             }
         }
 
+        /// <summary>
+        /// Mark user as inactive.
+        /// </summary>
+        /// <param name="id">User ID.</param>
+        /// <returns></returns>
+        [HttpPut]
+        [Route("inactive/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<GetUserResponse> MarkInactive(int id) {
+            try {
+                User user = userRepository.MarkInactive(id);
+                return Ok(mapper.Map<GetUserResponse>(user));
+            } catch {
+                return NotFound();
+            }
+        }
 
         /// <summary>
         /// Follow a user.
