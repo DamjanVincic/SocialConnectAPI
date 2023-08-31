@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SocialConnectAPI.DataAccess;
 
@@ -11,9 +12,11 @@ using SocialConnectAPI.DataAccess;
 namespace SocialConnectAPI.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20230831174730_AddedDTOs")]
+    partial class AddedDTOs
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,36 +27,6 @@ namespace SocialConnectAPI.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("SocialConnectAPI.DTOs.Comments.DbCommentDTO", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("PostId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Text")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PostId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("DbCommentDTO");
-                });
 
             modelBuilder.Entity("SocialConnectAPI.DTOs.Users.DbUserDTO", b =>
                 {
@@ -211,22 +184,6 @@ namespace SocialConnectAPI.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("SocialConnectAPI.DTOs.Comments.DbCommentDTO", b =>
-                {
-                    b.HasOne("SocialConnectAPI.Models.Post", null)
-                        .WithMany("Comments")
-                        .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("SocialConnectAPI.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("SocialConnectAPI.DTOs.Users.DbUserDTO", b =>
                 {
                     b.HasOne("SocialConnectAPI.Models.Post", null)
@@ -248,7 +205,7 @@ namespace SocialConnectAPI.Migrations
             modelBuilder.Entity("SocialConnectAPI.Models.Comment", b =>
                 {
                     b.HasOne("SocialConnectAPI.Models.Post", "Post")
-                        .WithMany()
+                        .WithMany("Comments")
                         .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
