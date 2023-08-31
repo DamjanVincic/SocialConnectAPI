@@ -20,11 +20,15 @@ namespace SocialConnectAPI.DataAccess {
                       .HasIndex(u => u.Email)
                       .IsUnique();
 
-            modelBuilder.Entity<Post>().OwnsOne(p => p.Tags);
+            // modelBuilder.Entity<Post>().OwnsOne(p => p.Tags);
+
+            modelBuilder.Entity<Post>()
+                        .HasMany<User>();
 
             modelBuilder.Entity<Post>()
                         .HasMany<Comment>()
-                        .WithOne();
+                        .WithOne()
+                        .HasForeignKey(p => p.PostId);
 
             // modelBuilder.Entity<User>()
             //         .HasMany<Post>()
