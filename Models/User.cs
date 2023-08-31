@@ -9,8 +9,8 @@ namespace SocialConnectAPI.Models {
         public string Email { get; set; }
         public string Password { get; set; }
         public UserStatus Status { get; set; }
-        public List<User> Following { get; set; }
-        public List<User> Followers { get; set; }
+        public virtual List<User> Following { get; set; } = new List<User>();
+        public virtual List<User> Followers { get; set; } = new List<User>();
         // public List<Post> LikedPosts { get; set; }
     }
 }

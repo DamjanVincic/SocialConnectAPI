@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using SocialConnectAPI.DataAccess;
+using SocialConnectAPI.DataAccess.Comments;
 using SocialConnectAPI.DataAccess.Posts;
 using SocialConnectAPI.DataAccess.Users;
 
@@ -14,7 +15,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IPostRepository, PostRepository>();
-// ubaciti ostale repozitorijume
+builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 
 
 builder.Services.AddDbContext<DatabaseContext>(options => {
