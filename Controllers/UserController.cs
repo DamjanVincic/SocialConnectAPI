@@ -24,14 +24,14 @@ namespace SocialConnectAPI.Controllers {
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<List<GetUserResponse>> GetUsers() {
+        public ActionResult<List<User>> GetUsers() {
             List<User> users = userRepository.GetUsers();
             // pretvoriti listu usera, postova, komenatra u DTOove pre slanja
             if (users == null) {
                 return NotFound();
             }
-            return Ok(mapper.Map<List<GetUserResponse>>(users));
-            // return Ok(users);
+            // return Ok(mapper.Map<List<GetUserResponse>>(users));
+            return Ok(users);
         }
 
         /// <summary>
@@ -102,6 +102,59 @@ namespace SocialConnectAPI.Controllers {
                 return Ok(mapper.Map<UpdateUserResponse>(userDB));
             } catch {
                 return StatusCode(500);
+            }
+        }
+
+        /// <summary>
+        /// Delete a user by ID.
+        /// </summary>
+        /// <param name="id">User ID.</param>
+        /// <returns></returns>
+        [HttpDelete]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<GetUserResponse> DeleteUserById(int id) {
+            try {
+                return Ok(mapper.Map<GetUserResponse>(userRepository.DeleteUserById(id)));
+            } catch {
+                return NotFound();
+            }
+        }
+
+        /// <summary>
+        /// Delete a user by email.
+        /// </summary>
+        /// <param name="email">User's email.</param>
+        /// <returns></returns>
+        [HttpDelete]
+        [Route("delete")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<GetUserResponse> DeleteUserByEmail(string email) {
+            try {
+                return Ok(mapper.Map<GetUserResponse>(userRepository.DeleteUserByEmail(email)));
+            } catch {
+                return NotFound();
+            }
+        }
+
+
+        /// <summary>
+        /// Follow a user.
+        /// </summary>
+        /// <param name="userId">ID of the user that will follow</param>
+        /// <param name="userToFollowId">ID of the user that to be followed</param>
+        /// <returns></returns>
+        [HttpPut]
+        [Route("follow")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult FollowUser(int userId, int userToFollowId) {
+            try {
+                userRepository.FollowUser(userId, userToFollowId);
+                return Ok();
+            } catch {
+                return NotFound();
             }
         }
     }

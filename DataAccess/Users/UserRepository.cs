@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using SocialConnectAPI.Models;
 
 namespace SocialConnectAPI.DataAccess.Users {
@@ -10,22 +11,25 @@ namespace SocialConnectAPI.DataAccess.Users {
 
 
         public List<User>? GetUsers() {
-            return databaseContext.Users.ToList().FindAll(u => u.Status != UserStatus.Inactive);
+            return databaseContext.Users.ToList().FindAll(u => u.Status != UserStatus.Inactive && u.Status != UserStatus.Deleted);
         }
 
         public User? GetUserById(int id) {
-            return databaseContext.Users.FirstOrDefault(u => u.Id == id && u.Status != UserStatus.Inactive);
+            return databaseContext.Users.Include(u => u.Followers).Include(u => u.Following).FirstOrDefault(u => u.Id == id && u.Status != UserStatus.Inactive && u.Status != UserStatus.Deleted);
         }
 
         public User? GetUserByEmail(string email) {
-            return databaseContext.Users.FirstOrDefault(u => u.Email == email && u.Status != UserStatus.Inactive);
+            return databaseContext.Users.FirstOrDefault(u => u.Email == email && u.Status != UserStatus.Inactive && u.Status != UserStatus.Deleted);
         }
 
         public User? GetUserByNameSurname(string name, string surname) {
-            return databaseContext.Users.FirstOrDefault(u => u.Name == name && u.Surname == surname && u.Status != UserStatus.Inactive);
+            return databaseContext.Users.FirstOrDefault(u => u.Name == name && u.Surname == surname && u.Status != UserStatus.Inactive && u.Status != UserStatus.Deleted);
         }
 
         public User CreateUser(User user) {
+            user.Followers = new List<User>();
+            user.Following = new List<User>();
+            // user.LikedPosts = new();
             var createdUser = databaseContext.Users.Add(user);
             SaveChanges();
             return createdUser.Entity;
