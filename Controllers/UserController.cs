@@ -111,6 +111,7 @@ namespace SocialConnectAPI.Controllers {
         /// <param name="id">User ID.</param>
         /// <returns></returns>
         [HttpDelete]
+        [Route("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<GetUserResponse> DeleteUserById(int id) {

@@ -12,8 +12,6 @@ namespace SocialConnectAPI.MappingProfiles {
 
             CreateMap<UpdatePostRequest, Post>();
             CreateMap<Post, UpdatePostResponse>();
-
-            // CreateMap<Post, DbPostDTO>();
         }
     }
 }

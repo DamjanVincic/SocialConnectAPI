@@ -69,7 +69,7 @@ namespace SocialConnectAPI.Controllers {
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<UpdateCommentResponse> UpdateComment(UpdateCommentRequest comment, int userId) {
-            // try {
+            try {
                 Comment? commentDB = commentRepository.GetCommentById(comment.Id);
                 if (commentDB == null)
                     return NotFound();
@@ -78,9 +78,9 @@ namespace SocialConnectAPI.Controllers {
                 mapper.Map(comment, commentDB);
                 commentRepository.SaveChanges();
                 return Ok(mapper.Map<UpdateCommentResponse>(comment));
-            // } catch {
-            //     return StatusCode(500);
-            // }
+            } catch {
+                return StatusCode(500);
+            }
         }
     }
 }
