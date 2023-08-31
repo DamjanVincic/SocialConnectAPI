@@ -86,12 +86,16 @@ namespace SocialConnectAPI.Controllers {
         /// <returns></returns>
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<UpdatePostResponse> UpdatePost(UpdatePostRequest post) {
             try {
                 Post? postDB = postRepository.GetPostById(post.Id);
                 if (postDB == null)
                     return NotFound();
+                if (postDB.UserId != post.UserId)
+                    return Unauthorized();
+                
                 mapper.Map(post, postDB);
                 postRepository.SaveChanges();
                 return Ok(mapper.Map<UpdatePostResponse>(postDB));
