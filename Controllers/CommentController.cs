@@ -63,6 +63,12 @@ namespace SocialConnectAPI.Controllers {
             }
         }
 
+        /// <summary>
+        /// Update a comment.
+        /// </summary>
+        /// <param name="comment">Comment to update.</param>
+        /// <param name="userId">ID of user that created the comment.</param>
+        /// <returns></returns>
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
