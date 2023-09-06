@@ -39,11 +39,11 @@ namespace SocialConnectAPI.Controllers {
         [Route("{userId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<GetCommentResponse> GetCommentByUserId(int userId) {
-            Comment? comment = commentRepository.GetCommentByUserId(userId);
-            if (comment == null)
+        public ActionResult<List<GetCommentResponse>> GetCommentByUserId(int userId) {
+            List<Comment> comments = commentRepository.GetCommentsByUserId(userId);
+            if (comments == null)
                 return NotFound();
-            return Ok(mapper.Map<GetCommentResponse>(comment));
+            return Ok(mapper.Map<List<GetCommentResponse>>(comments));
         }
 
         /// <summary>

@@ -24,8 +24,8 @@ namespace SocialConnectAPI.DataAccess.Comments {
             return databaseContext.Comments.FirstOrDefault(c => c.Id == id && c.Status != CommentStatus.Deleted);
         }
 
-        public Comment? GetCommentByUserId(int id) {
-            return databaseContext.Comments.FirstOrDefault(c => c.User.Id == id && c.Status != CommentStatus.Deleted);
+        public List<Comment> GetCommentsByUserId(int id) {
+            return databaseContext.Comments.ToList().FindAll(c => c.User.Id == id && c.Status != CommentStatus.Deleted);
         }
 
         public Comment CreateComment(Comment comment) {

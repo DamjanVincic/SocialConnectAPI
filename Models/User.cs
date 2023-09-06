@@ -13,6 +13,5 @@ namespace SocialConnectAPI.Models {
         public UserStatus Status { get; set; }
         public virtual List<DbUserDTO> Following { get; set; } = new List<DbUserDTO>();
         public virtual List<DbUserDTO> Followers { get; set; } = new List<DbUserDTO>();
-        // public List<Post> LikedPosts { get; set; }
     }
 }

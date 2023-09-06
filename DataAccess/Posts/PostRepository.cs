@@ -29,16 +29,13 @@ namespace SocialConnectAPI.DataAccess.Posts {
         }
 
         public List<Post> GetPostsByTag(string tag) {
-            // return databaseContext.Posts.ToList().FindAll(p => p.Tags.Contains(tag));
-            throw new NotImplementedException();
+            return databaseContext.Posts.Where(p => p.Status == PostStatus.Active && p.Tags.Any(t => t.Text == tag)).ToList();
         }
 
         public Post CreatePost(Post post) {
             post.User = userRepository.GetUserById(post.UserId);
             if (post.User == null)
                 throw new Exception("User not found.");
-            // post.Likes = new List<User>();
-            // post.Comments = new List<DbCommentDTO>();
             var createdPost = databaseContext.Posts.Add(post);
             SaveChanges();
             return createdPost.Entity;
@@ -66,22 +63,18 @@ namespace SocialConnectAPI.DataAccess.Posts {
             return post;
         }
 
-        public List<Post> GetNumberOfPosts(int number) {
-            // baca gresku jer baza vraca null umesto liste
-            
-            return GetPosts().OrderByDescending(p => p.Likes.Count()).Take(10).ToList();
+        public List<Post> GetNumberOfPosts(int number) {    
+            return GetPosts().OrderByDescending(p => p.LikeCount).Take(number).ToList();
         }
 
         public void LikePost(int postId, int userId) {
             Post post = GetPostById(postId);
-            // User user = new UserRepository(databaseContext).GetUserById(userId);
             User user = userRepository.GetUserById(userId);
 
             if (user == null || post == null)
-                throw new Exception("Not found.");
+                throw new Exception("Post or user not found.");
 
-            post.Likes.Add(mapper.Map<DbUserDTO>(user));
-            // user.LikedPosts.Add(post);
+            post.LikeCount += 1;
             SaveChanges();
         }
 

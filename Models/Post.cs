@@ -12,9 +12,7 @@ namespace SocialConnectAPI.Models {
         public virtual User User { get; set;}
         public string Text { get; set;}
         public virtual ICollection<Tag> Tags { get; set; }
-        // public virtual List<string> Tags { get; set;}
         public PostStatus Status { get; set; }
-        public virtual ICollection<DbUserDTO> Likes { get; set; }
-        // public virtual ICollection<DbCommentDTO> Comments { get; set; }
+        public int LikeCount { get; set; }
     }
 }

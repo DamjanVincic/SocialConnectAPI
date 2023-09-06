@@ -26,12 +26,10 @@ namespace SocialConnectAPI.Controllers {
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<List<GetUserResponse>> GetUsers() {
             List<User>? users = userRepository.GetUsers();
-            // pretvoriti listu usera, postova, komenatra u DTOove pre slanja
             if (users == null) {
                 return NotFound();
             }
             return Ok(mapper.Map<List<GetUserResponse>>(users));
-            // return Ok(users);
         }
 
         /// <summary>
@@ -77,7 +75,6 @@ namespace SocialConnectAPI.Controllers {
         public ActionResult<CreateUserResponse> CreateUser(CreateUserRequest user) {
             try {
                 var createdUser = userRepository.CreateUser(mapper.Map<User>(user));
-                // userRepository.SaveChanges();
                 return Created($"api/users/{createdUser.Id}", mapper.Map<CreateUserResponse>(createdUser));
             } catch {
                 return StatusCode(500);

@@ -31,9 +31,6 @@ namespace SocialConnectAPI.DataAccess.Users {
         }
 
         public User CreateUser(User user) {
-            // user.Followers = new List<User>();
-            // user.Following = new List<User>();
-            // user.LikedPosts = new();
             var createdUser = databaseContext.Users.Add(user);
             SaveChanges();
             return createdUser.Entity;
@@ -75,8 +72,12 @@ namespace SocialConnectAPI.DataAccess.Users {
             User userToFollow = GetUserById(userToFollowId);
             if (user == null || userToFollow == null)
                 throw new Exception("User not found");
+            databaseContext.Entry(user).Reload();
             user.Following.Add(mapper.Map<DbUserDTO>(userToFollow));
+            databaseContext.Entry(userToFollow).Reload();
             userToFollow.Followers.Add(mapper.Map<DbUserDTO>(user));
+            databaseContext.Entry(user).State = EntityState.Modified;
+            databaseContext.Entry(userToFollow).State = EntityState.Modified;
             SaveChanges();
         }
 
