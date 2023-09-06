@@ -25,36 +25,6 @@ namespace SocialConnectAPI.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("SocialConnectAPI.DTOs.Comments.DbCommentDTO", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("PostId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Text")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PostId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("DbCommentDTO");
-                });
-
             modelBuilder.Entity("SocialConnectAPI.DTOs.Users.DbUserDTO", b =>
                 {
                     b.Property<int>("Id")
@@ -75,9 +45,6 @@ namespace SocialConnectAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("PostId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
@@ -92,8 +59,6 @@ namespace SocialConnectAPI.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("PostId");
 
                     b.HasIndex("UserId");
 
@@ -140,6 +105,9 @@ namespace SocialConnectAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("LikeCount")
+                        .HasColumnType("int");
+
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
@@ -176,7 +144,7 @@ namespace SocialConnectAPI.Migrations
 
                     b.HasIndex("PostId");
 
-                    b.ToTable("Tag");
+                    b.ToTable("Tags");
                 });
 
             modelBuilder.Entity("SocialConnectAPI.Models.User", b =>
@@ -211,29 +179,8 @@ namespace SocialConnectAPI.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("SocialConnectAPI.DTOs.Comments.DbCommentDTO", b =>
-                {
-                    b.HasOne("SocialConnectAPI.Models.Post", null)
-                        .WithMany("Comments")
-                        .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("SocialConnectAPI.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("SocialConnectAPI.DTOs.Users.DbUserDTO", b =>
                 {
-                    b.HasOne("SocialConnectAPI.Models.Post", null)
-                        .WithMany("Likes")
-                        .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.HasOne("SocialConnectAPI.Models.User", null)
                         .WithMany("Followers")
                         .HasForeignKey("UserId")
@@ -285,10 +232,6 @@ namespace SocialConnectAPI.Migrations
 
             modelBuilder.Entity("SocialConnectAPI.Models.Post", b =>
                 {
-                    b.Navigation("Comments");
-
-                    b.Navigation("Likes");
-
                     b.Navigation("Tags");
                 });
 

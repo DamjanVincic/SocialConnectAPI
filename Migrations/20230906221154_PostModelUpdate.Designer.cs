@@ -12,8 +12,8 @@ using SocialConnectAPI.DataAccess;
 namespace SocialConnectAPI.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20230830195743_Removed user LikedPosts")]
-    partial class RemoveduserLikedPosts
+    [Migration("20230906221154_PostModelUpdate")]
+    partial class PostModelUpdate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,9 +21,54 @@ namespace SocialConnectAPI.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.10")
+                .HasAnnotation("Proxies:ChangeTracking", false)
+                .HasAnnotation("Proxies:CheckEquality", false)
+                .HasAnnotation("Proxies:LazyLoading", true)
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("SocialConnectAPI.DTOs.Users.DbUserDTO", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Surname")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("UserId1")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("UserId1");
+
+                    b.ToTable("DbUserDTO");
+                });
 
             modelBuilder.Entity("SocialConnectAPI.Models.Comment", b =>
                 {
@@ -34,9 +79,6 @@ namespace SocialConnectAPI.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("PostId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PostId1")
                         .HasColumnType("int");
 
                     b.Property<int>("Status")
@@ -53,8 +95,6 @@ namespace SocialConnectAPI.Migrations
 
                     b.HasIndex("PostId");
 
-                    b.HasIndex("PostId1");
-
                     b.HasIndex("UserId");
 
                     b.ToTable("Comments");
@@ -67,6 +107,9 @@ namespace SocialConnectAPI.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("LikeCount")
+                        .HasColumnType("int");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -104,7 +147,7 @@ namespace SocialConnectAPI.Migrations
 
                     b.HasIndex("PostId");
 
-                    b.ToTable("Tag");
+                    b.ToTable("Tags");
                 });
 
             modelBuilder.Entity("SocialConnectAPI.Models.User", b =>
@@ -117,7 +160,7 @@ namespace SocialConnectAPI.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -126,9 +169,6 @@ namespace SocialConnectAPI.Migrations
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("PostId")
-                        .HasColumnType("int");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -139,41 +179,28 @@ namespace SocialConnectAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Email")
-                        .IsUnique();
-
-                    b.HasIndex("PostId");
-
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("UserUser", b =>
+            modelBuilder.Entity("SocialConnectAPI.DTOs.Users.DbUserDTO", b =>
                 {
-                    b.Property<int>("FollowersId")
-                        .HasColumnType("int");
+                    b.HasOne("SocialConnectAPI.Models.User", null)
+                        .WithMany("Followers")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
-                    b.Property<int>("FollowingId")
-                        .HasColumnType("int");
-
-                    b.HasKey("FollowersId", "FollowingId");
-
-                    b.HasIndex("FollowingId");
-
-                    b.ToTable("UserUser");
+                    b.HasOne("SocialConnectAPI.Models.User", null)
+                        .WithMany("Following")
+                        .HasForeignKey("UserId1")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("SocialConnectAPI.Models.Comment", b =>
                 {
-                    b.HasOne("SocialConnectAPI.Models.Post", null)
+                    b.HasOne("SocialConnectAPI.Models.Post", "Post")
                         .WithMany()
                         .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("SocialConnectAPI.Models.Post", "Post")
-                        .WithMany("Comments")
-                        .HasForeignKey("PostId1")
-                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("SocialConnectAPI.Models.User", "User")
@@ -206,33 +233,16 @@ namespace SocialConnectAPI.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
-            modelBuilder.Entity("SocialConnectAPI.Models.User", b =>
-                {
-                    b.HasOne("SocialConnectAPI.Models.Post", null)
-                        .WithMany()
-                        .HasForeignKey("PostId");
-                });
-
-            modelBuilder.Entity("UserUser", b =>
-                {
-                    b.HasOne("SocialConnectAPI.Models.User", null)
-                        .WithMany()
-                        .HasForeignKey("FollowersId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("SocialConnectAPI.Models.User", null)
-                        .WithMany()
-                        .HasForeignKey("FollowingId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("SocialConnectAPI.Models.Post", b =>
                 {
-                    b.Navigation("Comments");
-
                     b.Navigation("Tags");
+                });
+
+            modelBuilder.Entity("SocialConnectAPI.Models.User", b =>
+                {
+                    b.Navigation("Followers");
+
+                    b.Navigation("Following");
                 });
 #pragma warning restore 612, 618
         }
