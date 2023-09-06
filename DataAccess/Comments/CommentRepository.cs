@@ -1,6 +1,7 @@
+using AutoMapper;
 using SocialConnectAPI.DataAccess.Posts;
 using SocialConnectAPI.DataAccess.Users;
-
+using SocialConnectAPI.DTOs.Comments;
 using SocialConnectAPI.Models;
 
 namespace SocialConnectAPI.DataAccess.Comments {
@@ -31,7 +32,7 @@ namespace SocialConnectAPI.DataAccess.Comments {
             comment.User = userRepository.GetUserById(comment.UserId);
             comment.Post = postRepository.GetPostById(comment.PostId);
             if (comment.User == null || comment.Post == null)
-                throw new Exception();
+                throw new Exception("User or post not found.");
             databaseContext.Comments.Add(comment);
             SaveChanges();
             return comment;

@@ -14,8 +14,7 @@ namespace SocialConnectAPI.Models {
         public virtual ICollection<Tag> Tags { get; set; }
         // public virtual List<string> Tags { get; set;}
         public PostStatus Status { get; set; }
-        // [NotMapped] // izbrisati
         public virtual ICollection<DbUserDTO> Likes { get; set; }
-        public virtual ICollection<DbCommentDTO> Comments { get; set; }
+        // public virtual ICollection<DbCommentDTO> Comments { get; set; }
     }
 }

@@ -79,14 +79,35 @@ namespace SocialConnectAPI.Controllers {
                 Comment? commentDB = commentRepository.GetCommentById(comment.Id);
                 if (commentDB == null)
                     return NotFound();
-                if (commentDB.UserId != userId || commentDB.Post.UserId != userId)
+                if (commentDB.UserId != userId)
                     return Unauthorized();
                 mapper.Map(comment, commentDB);
                 commentRepository.SaveChanges();
-                return Ok(mapper.Map<UpdateCommentResponse>(comment));
+                return Ok(mapper.Map<UpdateCommentResponse>(commentDB));
             } catch {
                 return StatusCode(500);
             }
+        }
+
+        /// <summary>
+        /// Delete a comment.
+        /// </summary>
+        /// <param name="id">Comment ID.</param>
+        /// <param name="userId">ID of user that created the comment, or user that created the post the comment is on.</param>
+        /// <returns></returns>
+        [HttpDelete]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<GetCommentResponse> DeleteComment(int id, int userId) {
+            Comment? comment = commentRepository.GetCommentById(id);
+            if (comment == null)
+                return NotFound();
+            if (userId != comment.UserId && userId != comment.Post.UserId)
+                return Unauthorized();
+            
+            Comment deletedComment = commentRepository.DeleteComment(id);
+            return Ok(mapper.Map<GetCommentResponse>(deletedComment));
         }
     }
 }

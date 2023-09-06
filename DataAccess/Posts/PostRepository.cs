@@ -38,7 +38,7 @@ namespace SocialConnectAPI.DataAccess.Posts {
             if (post.User == null)
                 throw new Exception("User not found.");
             // post.Likes = new List<User>();
-            post.Comments = new List<DbCommentDTO>();
+            // post.Comments = new List<DbCommentDTO>();
             var createdPost = databaseContext.Posts.Add(post);
             SaveChanges();
             return createdPost.Entity;

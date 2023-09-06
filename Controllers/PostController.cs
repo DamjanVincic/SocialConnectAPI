@@ -75,7 +75,7 @@ namespace SocialConnectAPI.Controllers {
                 var createdPost = postRepository.CreatePost(mapper.Map<Post>(post));
                 return Created($"api/posts/{createdPost.Id}", mapper.Map<CreatePostResponse>(createdPost));
             } catch {
-                return StatusCode(500);
+                return NotFound();
             }
         }
 
