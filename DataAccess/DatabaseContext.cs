@@ -21,21 +21,20 @@ namespace SocialConnectAPI.DataAccess {
                       .HasIndex(u => u.Email)
                       .IsUnique();
 
-            // modelBuilder.Entity<Post>()
-            //             .HasMany<User>();
+            // modelBuilder.Entity<User>()
+            //             .HasMany<Post>()
+            //             .WithOne()
+            //             .HasForeignKey(ul => ul.UserId);
+
+            // modelBuilder.Entity<User>()
+            //             .HasMany<Comment>()
+            //             .WithOne()
+            //             .HasForeignKey(ul => ul.UserId);
 
             // modelBuilder.Entity<Post>()
             //             .HasMany<Comment>()
             //             .WithOne()
-            //             .HasForeignKey(p => p.PostId);
-
-            // modelBuilder.Entity<User>()
-            //         .HasMany<Post>()
-            //         .WithOne();
-
-            // modelBuilder.Entity<Post>()
-            //         .HasMany<User>()
-            //         .WithOne();
+            //             .HasForeignKey(ul => ul.PostId);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
